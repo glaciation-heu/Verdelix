@@ -8,12 +8,13 @@ Verde: Derived from the Spanish and Italian word for "green," which implies envi
 Helix: A term used to describe the spiral structure of a double-stranded DNA molecule in biology. The helix can metaphorically represent structure, continuity, and interwoven elements. In a broader sense, it may signify intertwined data or a structured approach.
 
 Together, Verdelix suggests an eco-friendly, structured, and possibly intertwined or integrated approach, especially when applied to data or technology. It carries both an environmental consciousness and a sense of intricate, yet structured design. The name encapsulates the idea of a sustainable, green approach to structured or complex systems.
-
+# Description of Verdelix
 Verdelix, so far, is made up of two components. SODA and CEPH. To install SODA you firstly need to download the SODA installer
 
+## To install SODA
 git clone https://github.com/sodafoundation/installer.git
 cd installer/ansible
-# Checkout the required version. For example, to checkout v1.9.0 follow
+Checkout the required version. For example, to checkout v1.9.0 follow
 git checkout v1.9.0
 chmod +x install\_dependencies.sh && source install\_dependencies.sh
 export PATH=$PATH:/home/$USER/.local/bin
@@ -29,11 +30,11 @@ echo $HOST\_IP
 In the SODA Installer, modify host\_ip in group\_vars/common.yml and change it to the actual machine IP of the host.
 By default the host\_ip is set to 127.0.0.1 i.e. localhost.
 
-# This field indicates local machine host ip
+This field indicates local machine host ip
 host\_ip: 127.0.0.1
 
 
-# CEPH
+## Install CEPH
 Install the Rook Operator:
 1. kubectl create -f https://raw.githubusercontent.com/rook/rook/release-1.7/cluster/examples/kubernetes/ceph/common.yaml
 2. kubectl create -f https://raw.githubusercontent.com/rook/rook/release-1.7/cluster/examples/kubernetes/ceph/operator.yaml
