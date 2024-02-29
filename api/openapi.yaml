@@ -10,6 +10,17 @@ info:
     url: https://github.com/HIRO-MicroDataCenters-BV/template-python/blob/main/LICENSE
   version: 0.1.0
 paths:
+  /metrics:
+    get:
+      summary: Metrics
+      description: Endpoint that serves Prometheus metrics.
+      operationId: metrics_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
   /:
     get:
       summary: Example endpoint
