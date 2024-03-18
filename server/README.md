@@ -139,6 +139,10 @@ To manually generate the OpenAPI schema, execute the command from the project ro
 poetry --directory server run python ./tools/extract_openapi.py app.main:app --app-dir ./server --out ./api/openapi.yaml --app_version_file ./VERSION
 ```
 
+## Prometheus metrics
+The application includes prometheus-fastapi-instrumentator for monitoring performance and analyzing its operation. It automatically adds an endpoint `/metrics` where you can access application metrics for Prometheus. These metrics include information about request counts, request execution times, and other important indicators of application performance.
+More on that at (Prometheus FastAPI Instrumentator)[https://github.com/trallnag/prometheus-fastapi-instrumentator]
+
 ## Classy-FastAPI
 Classy-FastAPI allows you to easily do dependency injection of 
 object instances that should persist between FastAPI routes invocations,
