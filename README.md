@@ -26,3 +26,4 @@ Below we outline the key features of the framework and how SODA Foundation compo
 
 * **Enforcement of Data Sovereignty** 
     * **SODA Terra (through Integration):** Integrates with external IAM systems for access control. Provides a policy enforcement layer. Note: Encryption key management often resides outside of core SODA projects.
+
