@@ -1,6 +1,6 @@
-from SPARQLWrapper import SPARQLWrapper, JSON
 import datetime
 import re
+from SPARQLWrapper import SPARQLWrapper, JSON
 
 #mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = 'http://metadata.validation/api/v0/graph'
