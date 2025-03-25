@@ -3,8 +3,8 @@ import re
 
 from SPARQLWrapper import JSON, SPARQLWrapper
 
-#mention integration/validation metadata endpiunt
-SPARQL_ENDPOINT = 'http://metadata.validation/api/v0/graph'
+# mention integration/validation metadata endpiunt
+SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"
 
 # SPARQL Query to get all triples
 QUERY = """
@@ -38,12 +38,14 @@ filtered_triples = []
 timestamp_pattern = re.compile(r"timestamp:(\d+)")
 
 for result in results["results"]["bindings"]:
-    graph_name = result["g"]["value"] 
+    graph_name = result["g"]["value"]
     match = timestamp_pattern.search(graph_name)
 
     if match:
-        timestamp_ms = int(match.group(1)) 
-        timestamp_dt = datetime.datetime.utcfromtimestamp(timestamp_ms / 1000).replace(tzinfo=datetime.timezone.utc)
+        timestamp_ms = int(match.group(1))
+        timestamp_dt = datetime.datetime.utcfromtimestamp(timestamp_ms / 1000).replace(
+            tzinfo=datetime.timezone.utc
+        )
         age_days = (today - timestamp_dt).days
 
         if age_days > 30:
@@ -55,7 +57,9 @@ for result in results["results"]["bindings"]:
 if filtered_triples:
     print("\n Data Older than 30 days:")
     for s, p, o, ts, days in filtered_triples:
-        print(f" Subject: {s}\n   Predicate: {p}\n   Object: {o}\n   Timestamp: {ts} ({days} days old)\n")
+        print(
+            f" Subject: {s}\n   Predicate: {p}\n   Object: {o}\n   Timestamp: {ts} ({days} days old)\n"
+        )
 else:
     print("No data older than 30 days found.")
 
