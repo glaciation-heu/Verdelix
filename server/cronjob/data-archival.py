@@ -1,7 +1,8 @@
+import csv
 import datetime
 import re
 
-from SPARQLWrapper import JSON, SPARQLWrapper
+from SPARQLWrapper import JSON, SPARQLWrapper  # type: ignore
 
 # mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"
@@ -58,14 +59,18 @@ if filtered_triples:
     print("\n Data Older than 30 days:")
     for s, p, o, ts, days in filtered_triples:
         print(
-            f" Subject: {s}\n   Predicate: {p}\n   Object: {o}\n   Timestamp: {ts} ({days} days old)\n"
+            (
+                f" Subject: {s}\n"
+                f"   Predicate: {p}\n"
+                f"   Object: {o}\n"
+                f"   Timestamp: {ts} ({days} days old)\n"
+            )
         )
+
 else:
     print("No data older than 30 days found.")
 
 # Save to a CSV file
-import csv
-
 with open("filtered_data.csv", "w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerow(["Subject", "Predicate", "Object", "Timestamp", "Age (days)"])
