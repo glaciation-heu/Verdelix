@@ -1,5 +1,6 @@
 import datetime
 import re
+
 from SPARQLWrapper import JSON, SPARQLWrapper
 
 #mention integration/validation metadata endpiunt
@@ -60,6 +61,7 @@ else:
 
 # Save to a CSV file
 import csv
+
 with open("filtered_data.csv", "w", newline="", encoding="utf-8") as file:
     writer = csv.writer(file)
     writer.writerow(["Subject", "Predicate", "Object", "Timestamp", "Age (days)"])
