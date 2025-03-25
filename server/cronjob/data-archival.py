@@ -2,7 +2,7 @@ import csv
 import datetime
 import re
 
-from SPARQLWrapper import JSON, SPARQLWrapper  # type: ignore
+from SPARQLWrapper import JSON, SPARQLWrapper
 
 # mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"
