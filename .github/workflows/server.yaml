@@ -40,6 +40,7 @@ jobs:
         run: |
           poetry config virtualenvs.in-project true
           poetry install --no-root --with dev,test
+          poetry run pip list | grep SPARQLWrapper  # Debugging step
 
       - name: Run style checks
         run: |
