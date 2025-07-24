@@ -9,7 +9,7 @@ GRAPH_PREFIX = "https://glaciation-project.eu/uc/2/"
 ETL_AGENT_URI = "https://glaciation-project.eu/prov/ETLAgent"
 INGEST_PROCESS_URI = "https://glaciation-project.eu/prov/IngestProcess"
 
-# --- STEP 1: QUERY METADATA SUBJECTS ---
+# --- QUERY METADATA SUBJECTS ---
 sparql = SPARQLWrapper(ENDPOINT_URL)
 sparql.setReturnFormat(JSON)
 sparql.setQuery(f"""
@@ -33,7 +33,7 @@ except Exception as e:
     print("❌ SPARQL query failed:", e)
     exit()
 
-# --- STEP 2: GENERATE INSERT DATA ---
+# --- GENERATE INSERT DATA ---
 timestamp = datetime.now(timezone.utc).isoformat()
 insert_data = ""
 print(results)
@@ -52,7 +52,7 @@ if not insert_data.strip():
     print("ℹ️ No entities found. Nothing to insert.")
     exit()
 
-# --- STEP 3: PREPARE & PRINT SPARQL UPDATE ---
+# --- PREPARE & PRINT SPARQL UPDATE ---
 sparql_update_query = f"""
 PREFIX prov: <http://www.w3.org/ns/prov#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#dateTime>
@@ -65,7 +65,7 @@ INSERT DATA {{
 print("==== SPARQL UPDATE QUERY ====")
 print(sparql_update_query)
 
-# --- STEP 4: EXECUTE UPDATE ---
+# --- EXECUTE UPDATE ---
 update = SPARQLWrapper(UPDATE_URL)
 update.setMethod(POST)
 update.setRequestMethod(POSTDIRECTLY)
