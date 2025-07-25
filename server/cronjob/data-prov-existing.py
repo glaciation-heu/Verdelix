@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, URLENCODED, POSTDIRECTLY
 import requests
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any 
 
 # --- CONFIGURATION ---
 ENDPOINT_URL = "http://metadata.validation/api/v0/graph"
@@ -38,7 +38,7 @@ except Exception as e:
 timestamp = datetime.now(timezone.utc).isoformat()
 insert_data = ""
 print(results)
-results: dict[str, Any] = response.json()
+results: dict[str, Any] = sparql.query().convert()
 for result in results["results"]["bindings"]:
     g = result["g"]["value"]
     s = result["s"]["value"]
