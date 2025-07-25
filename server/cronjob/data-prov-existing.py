@@ -1,6 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, URLENCODED, POSTDIRECTLY
 import requests
 from datetime import datetime, timezone
+from typing import Any
 
 # --- CONFIGURATION ---
 ENDPOINT_URL = "http://metadata.validation/api/v0/graph"
@@ -30,13 +31,14 @@ LIMIT 10
 try:
     results = sparql.query().convert()
 except Exception as e:
-    print("❌ SPARQL query failed:", e)
+    print("SPARQL query failed:", e)
     exit()
 
 # --- GENERATE INSERT DATA ---
 timestamp = datetime.now(timezone.utc).isoformat()
 insert_data = ""
 print(results)
+results: dict[str, Any] = response.json()
 for result in results["results"]["bindings"]:
     g = result["g"]["value"]
     s = result["s"]["value"]
@@ -49,7 +51,7 @@ for result in results["results"]["bindings"]:
     """
 
 if not insert_data.strip():
-    print("ℹ️ No entities found. Nothing to insert.")
+    print("No entities found. Nothing to insert.")
     exit()
 
 # --- PREPARE & PRINT SPARQL UPDATE ---
@@ -73,9 +75,9 @@ update.setQuery(sparql_update_query)
 
 try:
     update.query()
-    print("✅ PROV metadata inserted successfully.")
+    print("PROV metadata inserted successfully.")
 except Exception as e:
-    print("❌ SPARQL insert failed:", e)
+    print("SPARQL insert failed:", e)
 
 
 headers = {"Content-Type": "application/json"}
@@ -84,8 +86,8 @@ payload = {"query": sparql_update_query}
 response = requests.post(UPDATE_URL, json=payload, headers=headers)
 
 if response.status_code == 200:
-    print("✅ PROV metadata inserted successfully.")
+    print("PROV metadata inserted successfully.")
 else:
-    print("❌ SPARQL insert failed.")
+    print("SPARQL insert failed.")
     print("Status:", response.status_code)
     print("Response:", response.text)
