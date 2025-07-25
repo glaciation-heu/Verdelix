@@ -1,7 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, POST, URLENCODED, POSTDIRECTLY
 import requests
 from datetime import datetime, timezone
-from typing import Any 
+from typing import Any, cast
 
 # --- CONFIGURATION ---
 ENDPOINT_URL = "http://metadata.validation/api/v0/graph"
@@ -29,16 +29,21 @@ LIMIT 10
 """)
 
 try:
-    results = sparql.query().convert()
+    raw_results = sparql.query().convert()
 except Exception as e:
     print("SPARQL query failed:", e)
     exit()
+
+if not isinstance(raw_results, dict):
+    print("SPARQL query returned unexpected format.")
+    exit()
+
+results = cast(dict[str, Any], raw_results)
 
 # --- GENERATE INSERT DATA ---
 timestamp = datetime.now(timezone.utc).isoformat()
 insert_data = ""
 print(results)
-results: dict[str, Any] = sparql.query().convert()
 for result in results["results"]["bindings"]:
     g = result["g"]["value"]
     s = result["s"]["value"]
