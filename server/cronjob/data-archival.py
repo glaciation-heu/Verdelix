@@ -205,7 +205,7 @@ dna_access_url_base = "https://dna-api.glaciation.eu/archive"
 dna_download_url_base = "https://dna-api.glaciation.eu/archive"
 
 # Run for each entry
-for file_id, file_timestamp in file_metadata:
+for f_id, f_timestamp in file_metadata:
     insert_dna_archive_metadata(
-        fuseki_url, file_id, file_timestamp, dna_access_url_base, dna_download_url_base
+        fuseki_url, f_id, f_timestamp, dna_access_url_base, dna_download_url_base
     )
