@@ -5,6 +5,7 @@ import subprocess
 
 import requests
 from SPARQLWrapper import JSON, SPARQLWrapper
+from typing import Any, cast
 
 # mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"
@@ -34,7 +35,13 @@ sparql.setQuery(QUERY)
 sparql.setReturnFormat(JSON)
 
 # Execute query
-results = sparql.query().convert()
+raw_results = sparql.query().convert()
+# Check it's a dictionary (as expected with JSON return format)
+if not isinstance(raw_results, dict):
+    raise ValueError("Unexpected SPARQL result format")
+
+# Inform MyPy: this is a nested JSON result
+results = cast(dict[str, dict[str, list[dict[str, dict[str, str]]]]], raw_results)
 
 # List to store UUIDs older than 30 days
 old_uuids = []
