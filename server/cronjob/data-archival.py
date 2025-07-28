@@ -1,3 +1,5 @@
+from typing import Any, cast
+
 import datetime
 import os
 import re
@@ -5,7 +7,6 @@ import subprocess
 
 import requests
 from SPARQLWrapper import JSON, SPARQLWrapper
-from typing import Any, cast
 
 # mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"

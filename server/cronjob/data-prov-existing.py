@@ -1,7 +1,9 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, POST, URLENCODED, POSTDIRECTLY
-import requests
-from datetime import datetime, timezone
 from typing import Any, Dict, cast
+
+from datetime import datetime, timezone
+
+import requests
+from SPARQLWrapper import JSON, POST, POSTDIRECTLY, URLENCODED, SPARQLWrapper
 
 # --- CONFIGURATION ---
 ENDPOINT_URL = "http://metadata.validation/api/v0/graph"
@@ -13,7 +15,8 @@ INGEST_PROCESS_URI = "https://glaciation-project.eu/prov/IngestProcess"
 # --- QUERY METADATA SUBJECTS ---
 sparql = SPARQLWrapper(ENDPOINT_URL)
 sparql.setReturnFormat(JSON)
-sparql.setQuery(f"""
+sparql.setQuery(
+    f"""
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 SELECT DISTINCT ?g ?s
@@ -26,7 +29,8 @@ WHERE {{
     FILTER (STRSTARTS(STR(?g), "{GRAPH_PREFIX}"))
 }}
 LIMIT 10
-""")
+"""
+)
 
 try:
     raw_results = sparql.query().convert()
