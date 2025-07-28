@@ -1,9 +1,9 @@
-from typing import Any, Dict, cast
+from typing import cast
 
 from datetime import datetime, timezone
 
 import requests
-from SPARQLWrapper import JSON, POST, POSTDIRECTLY, URLENCODED, SPARQLWrapper
+from SPARQLWrapper import JSON, POST, POSTDIRECTLY, SPARQLWrapper
 
 # --- CONFIGURATION ---
 ENDPOINT_URL = "http://metadata.validation/api/v0/graph"
@@ -52,13 +52,15 @@ print(results)
 for result in results["results"]["bindings"]:
     g = result["g"]["value"]
     s = result["s"]["value"]
-    insert_data += f"""
-    GRAPH <{g}> {{
-        <{s}> <http://www.w3.org/ns/prov#wasGeneratedBy> <{INGEST_PROCESS_URI}> ;
-               <http://www.w3.org/ns/prov#generatedAtTime> "{timestamp}"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;
-               <http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .
-    }}
-    """
+    insert_data += (
+    f'GRAPH <{g}> {{\n'
+    f'    <{s}> <http://www.w3.org/ns/prov#wasGeneratedBy> <{INGEST_PROCESS_URI}> ;\n'
+    f'           <http://www.w3.org/ns/prov#generatedAtTime> '
+    f'"{timestamp}"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n'
+    f'           <http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .\n'
+    f'}}\n'
+    )
+
 
 if not insert_data.strip():
     print("No entities found. Nothing to insert.")
