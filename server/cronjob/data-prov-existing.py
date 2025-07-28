@@ -53,12 +53,12 @@ for result in results["results"]["bindings"]:
     g = result["g"]["value"]
     s = result["s"]["value"]
     insert_data += (
-    f'GRAPH <{g}> {{\n'
-    f'    <{s}> <http://www.w3.org/ns/prov#wasGeneratedBy> <{INGEST_PROCESS_URI}> ;\n'
-    f'           <http://www.w3.org/ns/prov#generatedAtTime> '
-    f'"{timestamp}"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n'
-    f'           <http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .\n'
-    f'}}\n'
+        f'GRAPH <{g}> {{\n'
+        f'    <{s}> <http://www.w3.org/ns/prov#wasGeneratedBy> <{INGEST_PROCESS_URI}> ;\n'
+        f'           <http://www.w3.org/ns/prov#generatedAtTime> '
+        f'"{timestamp}"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n'
+        f'           <http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .\n'
+        f'}}\n'
     )
 
 

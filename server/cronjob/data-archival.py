@@ -97,11 +97,10 @@ def run(cmd, check=True, capture_output=False):
 
 
 def get_pod_name():
-    # cmd = f"kubectl get pods -n {NAMESPACE} -l '{LABEL_SELECTOR}' -o jsonpath='{{.items[0].metadata.name}}'"
     cmd = (
-    f"kubectl get pods -n {NAMESPACE} "
-    f"-l '{LABEL_SELECTOR}' "
-    f"-o jsonpath='{{.items[0].metadata.name}}'"
+        f"kubectl get pods -n {NAMESPACE} "
+        f"-l '{LABEL_SELECTOR}' "
+        f"-o jsonpath='{{.items[0].metadata.name}}'"
     )
     result = run(cmd, capture_output=True)
     pod_name = result.stdout.strip()
