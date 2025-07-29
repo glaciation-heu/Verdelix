@@ -32,6 +32,7 @@ LIMIT 10
 """
 )
 
+
 # function to execute provenence query
 def run_query():
     try:
@@ -56,13 +57,14 @@ def run_query():
         s = result["s"]["value"]
         insert_data += (
             f"GRAPH <{g}> {{\n"
-            f"<{s}> <http://www.w3.org/ns/prov#wasGeneratedBy> <{INGEST_PROCESS_URI}> ;\n"
+            f"<{s}> "
+            f"<http://www.w3.org/ns/prov#wasGeneratedBy> "
+            f"<{INGEST_PROCESS_URI}> ;\n"
             f"           <http://www.w3.org/ns/prov#generatedAtTime> "
             f'"{timestamp}"^^<http://www.w3.org/2001/XMLSchema#dateTime> ;\n'
-            f"           <http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .\n"
+            f"<http://www.w3.org/ns/prov#wasAttributedTo> <{ETL_AGENT_URI}> .\n"
             f"}}\n"
         )
-
 
     if not insert_data.strip():
         print("No entities found. Nothing to insert.")
@@ -93,7 +95,6 @@ def run_query():
     except Exception as e:
         print("SPARQL insert failed:", e)
 
-
     headers = {"Content-Type": "application/json"}
     payload = {"query": sparql_update_query}
 
@@ -105,6 +106,7 @@ def run_query():
         print("SPARQL insert failed.")
         print("Status:", response.status_code)
         print("Response:", response.text)
+
 
 # MAIN function
 if __name__ == "__main__":

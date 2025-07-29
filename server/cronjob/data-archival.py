@@ -45,6 +45,7 @@ sparql = SPARQLWrapper(SPARQL_ENDPOINT)
 sparql.setQuery(QUERY)
 sparql.setReturnFormat(JSON)
 
+
 def run_query():
     # Execute query
     raw_results = sparql.query().convert()
@@ -60,7 +61,6 @@ def run_query():
     # lists to store file_id (uuid) and corresponding timestamps
     file_id = []
     file_timestamp = []
-
 
     # Current time (UTC)
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -78,7 +78,8 @@ def run_query():
         if match:
             timestamp_ms = int(match.group(1))
             timestamp_dt = datetime.datetime.utcfromtimestamp(
-                timestamp_ms / 1000).replace(tzinfo=datetime.timezone.utc)
+                timestamp_ms / 1000
+            ).replace(tzinfo=datetime.timezone.utc)
             age_days = (now - timestamp_dt).days
 
             if age_days > 10:
@@ -92,6 +93,7 @@ def run_query():
     for u in old_uuids:
         print(f" {u}")
     return old_uuids, file_metadata
+
 
 # --- CONFIGURATION for storing/moving data in a local folder ---
 NAMESPACE = "semantification"
