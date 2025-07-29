@@ -8,6 +8,16 @@ import subprocess
 import requests
 from SPARQLWrapper import JSON, SPARQLWrapper
 
+# --- Batch Execution Setup ---
+
+# Fuseki SPARQL update endpoint
+fuseki_url = "http://metadata.validation/api/v0/graph/update"
+
+
+# Placeholder URLs for DNA archive endpoints
+dna_access_url_base = "https://dna-api.glaciation.eu/archive"
+dna_download_url_base = "https://dna-api.glaciation.eu/archive"
+
 # mention integration/validation metadata endpiunt
 SPARQL_ENDPOINT = "http://metadata.validation/api/v0/graph"
 
@@ -35,52 +45,53 @@ sparql = SPARQLWrapper(SPARQL_ENDPOINT)
 sparql.setQuery(QUERY)
 sparql.setReturnFormat(JSON)
 
-# Execute query
-raw_results = sparql.query().convert()
-# Check it's a dictionary (as expected with JSON return format)
-if not isinstance(raw_results, dict):
-    raise ValueError("Unexpected SPARQL result format")
+def run_query():
+    # Execute query
+    raw_results = sparql.query().convert()
+    # Check it's a dictionary (as expected with JSON return format)
+    if not isinstance(raw_results, dict):
+        raise ValueError("Unexpected SPARQL result format")
 
-# Inform MyPy: this is a nested JSON result
-results = cast(dict[str, dict[str, list[dict[str, dict[str, str]]]]], raw_results)
+    # Inform MyPy: this is a nested JSON result
+    results = cast(dict[str, dict[str, list[dict[str, dict[str, str]]]]], raw_results)
 
-# List to store UUIDs older than 30 days
-old_uuids = []
-# lists to store file_id (uuid) and corresponding timestamps
-file_id = []
-file_timestamp = []
+    # List to store UUIDs older than 30 days
+    old_uuids = []
+    # lists to store file_id (uuid) and corresponding timestamps
+    file_id = []
+    file_timestamp = []
 
 
-# Current time (UTC)
-now = datetime.datetime.now(datetime.timezone.utc)
+    # Current time (UTC)
+    now = datetime.datetime.now(datetime.timezone.utc)
 
-# Regex to extract timestamp
-timestamp_pattern = re.compile(r"timestamp:(\d+)")
+    # Regex to extract timestamp
+    timestamp_pattern = re.compile(r"timestamp:(\d+)")
 
-# Iterate over each binding
-for item in results["results"]["bindings"]:
-    uuid = item["uuid"]["value"]
-    graph_uri = item["g"]["value"]
+    # Iterate over each binding
+    for item in results["results"]["bindings"]:
+        uuid = item["uuid"]["value"]
+        graph_uri = item["g"]["value"]
 
-    # Extract timestamp using regex
-    match = timestamp_pattern.search(graph_uri)
-    if match:
-        timestamp_ms = int(match.group(1))
-        timestamp_dt = datetime.datetime.utcfromtimestamp(timestamp_ms / 1000).replace(
-            tzinfo=datetime.timezone.utc
-        )
-        age_days = (now - timestamp_dt).days
+        # Extract timestamp using regex
+        match = timestamp_pattern.search(graph_uri)
+        if match:
+            timestamp_ms = int(match.group(1))
+            timestamp_dt = datetime.datetime.utcfromtimestamp(
+                timestamp_ms / 1000).replace(tzinfo=datetime.timezone.utc)
+            age_days = (now - timestamp_dt).days
 
-        if age_days > 10:
-            old_uuids.append(uuid)
-            file_id.append(uuid)
-            file_timestamp.append(timestamp_ms)
+            if age_days > 10:
+                old_uuids.append(uuid)
+                file_id.append(uuid)
+                file_timestamp.append(timestamp_ms)
 
-file_metadata = list(zip(file_id, file_timestamp))
-# Output list of old UUIDs
-print("UUIDs older than 10 days:")
-for u in old_uuids:
-    print(f"🔹 {u}")
+    file_metadata = list(zip(file_id, file_timestamp))
+    # Output list of old UUIDs
+    print("UUIDs older than 10 days:")
+    for u in old_uuids:
+        print(f" {u}")
+    return old_uuids, file_metadata
 
 # --- CONFIGURATION for storing/moving data in a local folder ---
 NAMESPACE = "semantification"
@@ -132,12 +143,6 @@ def copy_selected_files(pod_name, file_list):
 
     print(f"\n Done! Files are copied to: {target_dir}")
     return target_dir
-
-
-# --- MAIN ---
-if __name__ == "__main__":
-    pod_name = get_pod_name()
-    copy_selected_files(pod_name, old_uuids)
 
 
 # updating file location in KG
@@ -199,18 +204,17 @@ def insert_dna_archive_metadata(
         print("Response:", response.text)
 
 
-# --- Batch Execution Setup ---
+def update_metadata(file_metadata):
+    # Run for each entry
+    for f_id, f_timestamp in file_metadata:
+        insert_dna_archive_metadata(
+            fuseki_url, f_id, f_timestamp, dna_access_url_base, dna_download_url_base
+        )
 
-# Your Fuseki SPARQL update endpoint
-fuseki_url = "http://metadata.validation/api/v0/graph/update"
 
-
-# Placeholder URLs for DNA archive endpoints
-dna_access_url_base = "https://dna-api.glaciation.eu/archive"
-dna_download_url_base = "https://dna-api.glaciation.eu/archive"
-
-# Run for each entry
-for f_id, f_timestamp in file_metadata:
-    insert_dna_archive_metadata(
-        fuseki_url, f_id, f_timestamp, dna_access_url_base, dna_download_url_base
-    )
+# --- MAIN ---
+if __name__ == "__main__":
+    old_uuids, file_metadata = run_query()
+    pod_name = get_pod_name()
+    copy_selected_files(pod_name, old_uuids)
+    update_metadata(file_metadata)
