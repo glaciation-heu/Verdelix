@@ -16,6 +16,7 @@ on:
 env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE_NAME: glaciation-heu/verdelix  # harcoded the image name
+  DOCKER_IMAGES: ghcr.io/glaciation-heu/verdelix:dev-test # harcoded tag
 
 jobs:
   test_server:
