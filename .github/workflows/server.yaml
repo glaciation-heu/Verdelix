@@ -17,6 +17,7 @@ env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE_NAME: glaciation-heu/verdelix  # harcoded the image name
   DOCKER_IMAGES: ghcr.io/glaciation-heu/verdelix:dev-test # harcoded tag
+  VERSION_APP: dev-test # hardcoding version app 
 
 jobs:
   test_server:
