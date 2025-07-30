@@ -3,12 +3,12 @@ entries:
   server:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2025-07-30T09:53:12.725054515Z"
+    created: "2025-07-30T10:02:38.312133688Z"
     description: Web server
-    digest: cbc49693b2ca93148d7fc88d7683a7d8629b6c813b44340d5af62f9e7a2a7a11
+    digest: c4b1671e694f9d35a34ee75fd0865908bcb697dbcb318bfde2dab18e60fafc42
     name: server
     type: application
     urls:
     - https://glaciation-heu.github.io/Verdelix/helm-charts/server-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-30T09:53:12.724656398Z"
+generated: "2025-07-30T10:02:38.311237696Z"
