@@ -136,6 +136,7 @@ jobs:
           token: ${{ github.token }}
           charts_dir: "./server/charts/"
           target_dir: "./helm-charts/"
+          force: true
       
       # Debugging step
       - name: Debug versioning output
