@@ -16,8 +16,8 @@ on:
 env:
   REGISTRY: ghcr.io
   DOCKER_IMAGE_NAME: glaciation-heu/verdelix  # harcoded the image name
-  DOCKER_IMAGES: ghcr.io/glaciation-heu/verdelix:dev-test # harcoded tag
-  VERSION_APP: dev-test # hardcoding version app 
+  # DOCKER_IMAGES: ghcr.io/glaciation-heu/verdelix:dev-test # harcoded tag
+  # VERSION_APP: dev-test # hardcoding version app 
 
 jobs:
   test_server:
@@ -91,15 +91,14 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Commenting to avoid over writing by tools/version.sh
-      # - name: Make versions
-      #   run: |
-      #     cd "${{ github.workspace }}"
-      #     chmod +x ./tools/version.sh
-      #     ./tools/version.sh "${{ env.REGISTRY }}/${{ vars.DOCKER_IMAGE_NAME }}"
-      #     echo "VERSION_APP=$(cat "./VERSION_APP")" >> $GITHUB_ENV
-      #     echo "DOCKER_IMAGES=$(cat "./DOCKER_IMAGES")" >> $GITHUB_ENV
-      #     echo "DOCKER_TAGS=$(cat "./VERSION_DOCKER")" >> $GITHUB_ENV
+      - name: Make versions
+        run: |
+          cd "${{ github.workspace }}"
+          chmod +x ./tools/version.sh
+          ./tools/version.sh "${{ env.REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}"
+          echo "VERSION_APP=$(cat "./VERSION_APP")" >> $GITHUB_ENV
+          echo "DOCKER_IMAGES=$(cat "./DOCKER_IMAGES")" >> $GITHUB_ENV
+          echo "DOCKER_TAGS=$(cat "./VERSION_DOCKER")" >> $GITHUB_ENV
 
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@v3
@@ -139,3 +138,11 @@ jobs:
           token: ${{ github.token }}
           charts_dir: "./server/charts/"
           target_dir: "./helm-charts/"
+      
+      # Debugging step
+      - name: Debug versioning output
+        run: |
+          echo "VERSION_APP: $VERSION_APP"
+          echo "DOCKER_IMAGES: $DOCKER_IMAGES"
+          echo "DOCKER_TAGS: $DOCKER_TAGS"
+
