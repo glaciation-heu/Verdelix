@@ -45,7 +45,6 @@ def run_query():
         print("SPARQL query returned unexpected format.")
         exit()
 
-    # results = cast(Dict[str, Any], raw_results)
     results = cast(dict[str, dict[str, list[dict[str, dict[str, str]]]]], raw_results)
 
     # --- GENERATE INSERT DATA ---

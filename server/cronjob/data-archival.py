@@ -147,9 +147,6 @@ def copy_selected_files(pod_name, file_list):
     return target_dir
 
 
-# updating file location in KG
-
-
 def ms_to_iso8601(ms):
     """Convert a millisecond timestamp to ISO 8601 UTC string"""
     dt = datetime.datetime.fromtimestamp(int(ms) / 1000, tz=datetime.timezone.utc)
