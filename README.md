@@ -1,6 +1,10 @@
 # Verdelix
 ## Secure data management framework for AI 
 
+This repository is part of the T3.5 initiative focused on building a secure and scalable Data Management Framework for AI-driven applications.
+
+This service is designed to manage, archive, and trace datasets within a Kubernetes-based infrastructure using Knowledge Graphs, Longhorn volumes, and open standards like PROV-O.
+
 Verdelix is a synthesis of two core concepts:
 
 **Verde:** 
@@ -26,3 +30,29 @@ Below we outline the key features of the framework and how SODA Foundation compo
 
 * **Enforcement of Data Sovereignty** 
     * **SODA Terra (through Integration):** Integrates with external IAM systems for access control. Provides a policy enforcement layer. Note: Encryption key management often resides outside of core SODA projects.
+
+## Features added
+
+Below mentioned are the two key features implemented as part of Secure data management framework:
+
+* **Data Archival**
+    * `data-archival.py` is the script that handles the feature. It can be found at `/server/cronjob/data-archival.py`.
+    * This script can be excuted simply by running the following commands in the terminal:
+    ```bash
+    cd Verdelix/server/cronjob/
+    python3 data-archival.py
+    ```
+    * Scans the Knowledge Graph for datasets older than 10 days.
+    * Extracts those files from Longhorn Persistent Volumes (PVs). Such files can be found at `/server/cronjob/longhorn-data-backup/` folder.
+    * These files can be further DNA encoded and stored in DNA storage for archival.
+    
+* **Data Provenance**
+    * `data-prov-existing.py` is the script that handles the feature. It can be found at `\server\cronjob\data-prov-existing.py`.
+    * This script can be excuted simply by running the following commands in the terminal:
+    ```bash
+    cd Verdelix/server/cronjob/
+    python3 data-prov-existing.py
+    ```
+    * Queries and enhances the existing metadata in the Knowledge Graph using the PROV-O ontology.
+    * Enables traceability of data-tracking its origin, lineage, and transformation.
+    * Supports reproducibility and auditability for AI workflows.
